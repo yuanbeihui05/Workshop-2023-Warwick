@@ -1,5 +1,7 @@
 path = prepend("./", path)
+path = prepend("./GSplines", path)
 needsPackage "SubalgebraBases"
+needsPackage "GeometricContinuousSplines"
 
 --R = QQ[x_1, y_1, x_2, y_2, MonomialOrder => Lex]
 R = QQ[x_1, y_1, x_2, y_2]
@@ -37,7 +39,7 @@ gens sagbi oo
 I = ideal(x_1^2,  y_2^2, x_1 - f, y_1 - g);
 transpose leadTerm I
 
--- compute a basis for degree up to 6
+-- compute a monomial basis for degree up to 6
 -- the sagbi basis is monomial so we can just take these
 L = monomials (y_2 + x_2 + y_1 + 1)^6
 M = L % (leadTerm I)
@@ -49,17 +51,17 @@ transpose oo -- k-vectorspace basis for G_d
 use R
 
 for i from 1 to 15 do (
-    L := monomials (y_2 + x_2 + y_1 + 1)^i;
+    L := monomials (y_2 + x_2 + y_1 + 1)^i;--they are from the generators of intersectSubs(f,g)
     M := L % (leadTerm I);
     print(i, numcols compress M);
     )
 
-
-
-
-
-
-
+-- compare with the result given by GSplines
+E = {{1,2}};
+for i from 1 to 15 do (
+    dimG := (gSplineBasis(E,{I},i))#"dimension";
+    dimQ := (i+2)*(i+1)-dimG;
+    print(i,dimQ);)
 
 
 -- initial subring 
